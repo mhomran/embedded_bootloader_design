@@ -109,3 +109,63 @@
 - <strong>Bootloader</strong> should be abstracted like Z-Area in TI vendor to keep it hidden from app side.
 - <strong>lock JTAG</strong> pins before deployment to prevent any attacks that may happen on bootloader code.
 
+### Image storing
+- Image can be saved in free space of internal flash or in external memory.
+- Images in external flash should be kept encrypted.
+- Images in internal should be decrypted.
+- Image can be located at absolute or relevant location.
+- Relevant location means independent position code (IPC).
+
+### Failure receiving and recovery
+
+- In case of external memory supported.
+- Active, inactive slots used for recovery operation.
+- Server host should be indicated for either failure or recovery operations.
+
+### Invocation rules before jumping from the bootloader code to application code
+- disable (maskable) interrupts
+- Deinit HW modules 
+- Disable systick timer
+- Relocate interrupt vector table to avoid undefined behavior in runtime.
+- Set shared non-volatile flag
+- Initialize MSP stack pointer 
+
+### Invocation rules after jumping from the bootloader code to application code
+- Clear RAM.
+- Init (.data) sections 
+- Reinitialize HW modules.
+- Enable interrupts.
+
+### ARM architecture hints
+<figure>
+  <img src="img/arm_system_modes.png">
+  <figcaption>ARM System Modes</figcaption>
+</figure>
+
+### Interrupt vector table
+
+- It's prefered that the application and the bootloader has their own interrupt vector table.
+
+## Simple bootloader
+
+### Technical requirements
+- Bootloader should update FW Manually using "push button holding signal"
+- By default, system should be in boot mode if there's no application or corruption cases.
+- Push button holding signal in boot mode should do nothing.
+- when system in boot mode, "boot led" should be blinking.
+- When system is in App mode, "App led" should be blinking.
+- Switching from boot mode to app mode should be protected if application exist.
+- Each program should have its ows vector table and bootloader vector table is located at 0 address by default.
+- Boot manager should be as a part from bootloader memory.
+
+### System design
+<figure>
+  <img src="img/simple_bootloader_system_design.png">
+  <figcaption>System Design</figcaption>
+</figure>
+<figure>
+  <img src="img/simple_bootloader_memory_design.png">
+  <figcaption>Memory Design</figcaption>
+</figure>
+
+
