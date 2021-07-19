@@ -83,3 +83,29 @@
 
 - Problem: what if the application code doesn't exist yet ?
 - Solution: the bootloader is the one who's responsible for receiving the image using the shared communication stack.
+
+### building image strcture
+1. Image header
+    - Image CRC
+    - Image size
+    - Image status (Active-Inactive-Backup)
+    - Image ID
+    - Image entry point address 
+1. Image content
+    - Image interrupt vector table
+    - Image functionality
+
+### Image verification
+- Bootloader should has image verification to prevent untrusted program to run.
+- Verification on new image may happen for just first time or with each reset cycle, but this is overhead on system.
+- Instead, we can verify image for first time then set image verification flag.
+- New image should be verified before the programming is attempted.
+- HW/SW Encryption and CRC modules is highly recommended for image verification.
+
+### Security
+- <strong>System</strong> should offer security ways to prevent untrusted server to update firmware code.
+- <strong>Password</strong> can be used as authentication for locking bootloader itself from updating and flash operation.
+- HW/SW <strong>encryption</strong> is highly recommended for update firmware.
+- <strong>Bootloader</strong> should be abstracted like Z-Area in TI vendor to keep it hidden from app side.
+- <strong>lock JTAG</strong> pins before deployment to prevent any attacks that may happen on bootloader code.
+
