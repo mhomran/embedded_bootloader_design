@@ -44,4 +44,33 @@
     - Perform main functionality.
 
 ### Bootloader general sequence.
-### Embedded bootloader types.
+<figure>
+  <img src="img/bootloader_sequence.png">
+  <figcaption>bootloader sequence</figcaption>
+</figure>
+
+- Note: it's not prefered to use flash memory in branching code to store the check flag, because you can't write just one word, you can write an entire sector which will lead to wasted space. Instead, you can use EEPROM.
+
+- Application checking
+    1. CRC checking
+    1. Flash erasing checking
+    1. Image verification flag
+    1. etc.
+
+### Embedded bootloader types (providing)
+
+- vendor bootloader
+- custom bootloader
+- both vendor and custom bootloader
+
+- Note: In case of existing vendor bootloader and you want to add your custom bootloader, it will be added in flash. And you should adjust the <code>Vector Table Offset Register</code> to point to the new application program which starts with the vector table.
+
+- There's pins for determining the booting mode (Vendor, flash, SRAM), typically they are two pins. The MCU remap the physical address of the chosen memory to the right place, for example if the flash mode is used the MCU will remap the start of the custom bootloader in the flash memory to address 0x0 for arm-cortex-m CPUs.
+
+## bootloader design considerations.
+
+### Why application code receives the image and not the bootloader ?!
+
+- Problem: Suppose your bootloader receives the image using Wireless communication. So, there should be a wireless stack in the bootloader section. At the same time, the application code uses wireless, so it also needs wireless stack. In case of receiving the image in the bootloader section, there will be <strong>duplication</strong>.
+- Solution: make the application code receive the image, so just one wireless stack exist in the flash memory. At this case the bootloader is called bootstrap.
+
