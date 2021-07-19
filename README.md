@@ -74,8 +74,12 @@
 - Problem: Suppose your bootloader receives the image using Wireless communication. So, there should be a wireless stack in the bootloader section. At the same time, the application code uses wireless, so it also needs wireless stack. In case of receiving the image in the bootloader section, there will be <strong>duplication</strong>.
 - Solution: make the application code receive the image, so just one wireless stack exist in the flash memory. At this case the bootloader is called bootstrap.
 
+<hr>
+
 - Problem: what if the application code is corrupted for some reason ?
 - Solution: make the communication stack (e.g. wireless stack) a shared library within a specific section.
+
+<hr>
 
 - Problem: what if the application code doesn't exist yet ?
 - Solution: the bootloader is the one who's responsible for receiving the image using the shared communication stack.
