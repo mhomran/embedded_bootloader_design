@@ -168,4 +168,12 @@
   <figcaption>Memory Design</figcaption>
 </figure>
 
+### Hints:
+- Sometimes the watchdog timer can't be disabled except by a reset. So, you may need to initialize it after the bootmanager, so you already determined whether you'll enter the bootloader or the application. 
+
+- To debug the application through debugging the bootloader, you can use this gdb command to load the symbols from app .elf file
+  ```
+  add-symbol-file app.elf
+  ```
+
 
